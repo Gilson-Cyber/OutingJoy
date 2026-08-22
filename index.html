@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FFF8F0">
+<meta name="description" content="OutingJoy helps families find free and affordable things to do anywhere in the United States.">
+<title>OutingJoy — Find a good day, anywhere.</title>
+<style>
+:root{--cream:#fffaf4;--paper:#ffffff;--ink:#25322f;--muted:#6d7b76;--line:#eadfd4;--coral:#ef7f6d;--coralDark:#d96858;--teal:#3a8f84;--tealDark:#2f766d;--sun:#f4c45f;--lav:#9a91cf;--green:#6fa874;--peach:#fff0e5;--mint:#eaf6f3;--shadow:0 16px 44px rgba(72,55,37,.10);--r:24px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 5% 0,#fff0dd 0,transparent 30rem),radial-gradient(circle at 100% 8%,#e8f6f2 0,transparent 35rem),var(--cream);color:var(--ink);font-family:"Avenir Next","Segoe UI",Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,sans-serif}
+a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 0 8px}.brand{display:flex;align-items:center;gap:11px;font-size:24px;font-weight:900;letter-spacing:-.045em}.logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(145deg,#f08a75,var(--sun));display:grid;place-items:center;box-shadow:0 10px 24px rgba(239,127,109,.24);font-size:22px}.tag{font-size:12px;color:var(--muted);font-weight:750}
+.hero{padding:31px 0 23px}.heroGrid{display:grid;grid-template-columns:1fr;gap:18px;align-items:end}.eyebrow{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--teal);font-size:12px;font-weight:900}h1{font-size:clamp(42px,7vw,76px);line-height:.96;letter-spacing:-.058em;margin:15px 0 14px;max-width:760px;font-weight:900}h1 em{font-style:normal;color:var(--coral)}.hero p{font-size:17px;line-height:1.62;color:#53625e;max-width:720px;margin:0}
+.finder{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:28px;padding:16px;box-shadow:var(--shadow);margin-bottom:18px}.finderTop{display:grid;grid-template-columns:1.8fr .7fr auto;gap:9px}.locationBox{position:relative}input,select,button{font:inherit;border:1px solid #dfd7cd;background:#fff;color:var(--ink);border-radius:13px;min-height:48px;padding:11px 13px}input{width:100%}input:focus,select:focus{outline:3px solid #2f8f8315;border-color:var(--teal)}button{font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--teal),var(--tealDark));border-color:var(--teal);color:#fff;box-shadow:0 8px 18px rgba(58,143,132,.18)}.suggestions{display:none;position:absolute;left:0;right:0;top:54px;z-index:40;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden}.suggestions.show{display:block}.suggestion{padding:11px 13px;border-bottom:1px solid #f1ece6;cursor:pointer}.suggestion:hover{background:#fafcfb}.suggestion:last-child{border:0}.suggestion b{display:block;font-size:13px}.suggestion small{color:var(--muted)}.current{display:flex;gap:8px;align-items:center;margin-top:9px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.toolbar{position:sticky;top:0;z-index:20;background:#fff8f0f2;backdrop-filter:blur(12px);border-top:1px solid #eadfd4;border-bottom:1px solid #eadfd4}.filters{display:grid;grid-template-columns:1.25fr repeat(4,.75fr);gap:8px;padding:11px 0 8px}.quick{display:flex;gap:7px;overflow:auto;padding:0 0 11px}.chip{white-space:nowrap;min-height:36px;border-radius:999px;padding:7px 11px;font-size:12px;background:#fff}.chip.active{background:linear-gradient(135deg,var(--coral),var(--coralDark));border-color:var(--coral);color:#fff;box-shadow:0 5px 12px rgba(239,127,109,.16)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px 0 13px}.stat{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:18px;padding:14px 15px}.stat b{display:block;font-size:26px}.stat span{font-size:12px;color:var(--muted)}.military{display:none;background:linear-gradient(135deg,#f2f3ff,#fff);border:1px solid #e0e3f4;border-radius:18px;padding:15px;margin-bottom:17px;font-size:13px;line-height:1.5}.military a{font-weight:900;color:#6269a3;text-decoration:none;margin-right:12px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:4px 0 12px}.head h2{font-size:26px;letter-spacing:-.04em;margin:0;font-weight:850}.head p{font-size:12px;color:var(--muted);margin:4px 0 0}.reset{color:var(--teal)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding-bottom:28px}.card{background:linear-gradient(180deg,#fff,#fffdfb);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:0 10px 26px rgba(59,48,37,.065);position:relative;overflow:hidden;transition:transform .16s ease,box-shadow .16s ease}.card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(59,48,37,.09)}.card:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--coral),var(--sun))}.card.nps:before{background:linear-gradient(90deg,var(--teal),#7bc4b7)}.card.event:before{background:linear-gradient(90deg,var(--lav),#bbb4e4)}.badges{display:flex;gap:6px;flex-wrap:wrap;margin:1px 78px 10px 0}.badge{font-size:10px;font-weight:950;letter-spacing:.04em;border-radius:999px;padding:5px 7px;background:#f3f0eb;color:#5c6864}.badge.free{background:#e8f5e8;color:#47794a}.badge.public{background:#fff3d6;color:#876817}.badge.mil{background:#edf0ff;color:#5c64a1}.badge.event{background:#f1edff;color:#7365a8}.dist{position:absolute;right:15px;top:18px;color:#8a9792;font-size:11px;font-weight:850}.card h3{font-size:20px;line-height:1.18;letter-spacing:-.025em;margin:0 0 7px}.meta{font-size:12px;color:#7b8984}.desc{font-size:14px;line-height:1.5;color:#52615d;margin:11px 0}.note{border:1px solid #ebe4db;background:#fcfaf7;border-radius:12px;padding:10px;font-size:12px;line-height:1.45}.note strong{color:var(--teal)}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.actions a{text-decoration:none;border:1px solid #e2dcd4;border-radius:10px;padding:8px 10px;font-size:11px;font-weight:850}.actions a:hover{border-color:var(--coral);color:var(--coral)}.empty,.loading{grid-column:1/-1;text-align:center;border:1px dashed #ddd5cb;border-radius:18px;padding:44px 16px;color:var(--muted);background:#ffffff8c}footer{border-top:1px solid #e5ddd3;margin-top:20px;padding:25px 0 42px;color:#7f8c87;font-size:11px;line-height:1.65}footer strong{color:#4f5c58}
+@media(max-width:900px){.heroGrid{grid-template-columns:1fr}.finderTop{grid-template-columns:1fr 1fr}.locationBox{grid-column:1/-1}.filters{grid-template-columns:1fr 1fr}.filters #search{grid-column:1/-1}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.top>.tag{display:none}.grid{grid-template-columns:1fr}.finderTop{grid-template-columns:1fr}.locationBox{grid-column:auto}.head{align-items:start;flex-direction:column}.dist{position:static;margin-bottom:7px}.badges{margin-right:0}}
+@media(max-width:420px){.filters,.stats{grid-template-columns:1fr}.filters #search{grid-column:auto}}
+
+.funRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.funRow span{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:850;box-shadow:0 5px 14px rgba(71,55,37,.06)}
+.logo{position:relative;overflow:hidden}
+.logo:after{content:"";position:absolute;inset:-18px;background:linear-gradient(120deg,transparent 36%,rgba(255,255,255,.55) 50%,transparent 64%);transform:translateX(-70%);animation:shine 5s ease-in-out infinite}
+@keyframes shine{0%,70%,100%{transform:translateX(-70%)}82%{transform:translateX(70%)}}
+.finder{position:relative}
+.finder:before{content:"Start here";position:absolute;top:-11px;left:24px;background:var(--sun);color:#59471d;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
+.primary:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(58,143,132,.25)}
+.primary,.chip,.actions a,.card{transition:all .18s ease}
+.chip:hover{border-color:var(--coral);color:var(--coral)}
+.stat:nth-child(1){background:linear-gradient(180deg,#fff,#fff7f0)}
+.stat:nth-child(2){background:linear-gradient(180deg,#fff,#f4fbf8)}
+.stat:nth-child(3){background:linear-gradient(180deg,#fff,#faf7ff)}
+.stat:nth-child(4){background:linear-gradient(180deg,#fff,#fffaf0)}
+
+
+.verifyBanner{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,#fff8dc,#fff);border:1px solid #eedf9a;border-radius:18px;padding:14px 15px;margin:0 0 17px;font-size:13px;line-height:1.5;color:#5e583e}
+.verifyBanner strong{color:#4e4932}
+.verifyIcon{flex:0 0 28px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--sun);color:#5d4b1d;font-weight:950}
+
+</style>
+</head>
+<body>
+<div class="wrap top">
+ <div class="brand"><div class="logo">☀️</div><div>OutingJoy<div class="tag">Find a good day, anywhere.</div></div></div>
+ <div class="tag">Free to use • Parent-first • Nationwide</div>
+</div>
+<header class="wrap hero">
+ <div class="heroGrid"><div><div class="eyebrow">✨ Your next favorite family day starts here</div><h1>Find the fun.<br><em>Make the memory.</em></h1><p>Search any U.S. location and instantly uncover playful, affordable family ideas — from playgrounds and beaches to museums, parks and special events.</p></div>
+<div class="funRow" aria-hidden="true">
+  <span>🛝 Playgrounds</span>
+  <span>🏖️ Beaches</span>
+  <span>🌳 Parks</span>
+  <span>🦕 Museums</span>
+  <span>🎨 Events</span>
+  <span>✨ Free finds</span>
+</div>
+</div>
+</header>
+<main>
+<div class="wrap"><section class="finder">
+ <div class="finderTop"><div class="locationBox"><input id="locationInput" autocomplete="off" placeholder="City, state or ZIP code (e.g., Austin, TX)"><div id="suggestions" class="suggestions"></div></div><select id="radius"><option value="10">10 miles</option><option value="25" selected>25 miles</option><option value="50">50 miles</option></select><button id="locationSearch" class="primary">Search</button></div>
+ <div class="current"><span class="dot"></span><span id="locationLabel">Choose a location to begin</span></div>
+</section></div>
+
+<div class="toolbar"><div class="wrap"><div class="filters">
+ <input id="search" placeholder="Search what sounds fun…">
+ <select id="view"><option value="all">Places + events</option><option value="places">Places only</option><option value="events">Events only</option></select>
+ <select id="price"><option value="all">Any price</option><option value="free">Free / public</option><option value="military">Military benefit</option></select>
+ <select id="category"><option value="all">All categories</option><option>Playground</option><option>Park</option><option>Library</option><option>Museum</option><option>Beach</option><option>NPS</option></select>
+ <select id="sort"><option value="distance">Closest first</option><option value="free">Free first</option><option value="events">Events first</option></select>
+</div><div class="quick"><button class="chip active" data-q="all">✨ PICKS</button><button class="chip" data-q="free">💸 FREE</button><button class="chip" data-q="outdoor">🌳 OUTDOORS</button><button class="chip" data-q="indoor">🏠 INDOORS</button><button class="chip" data-q="military">🎖️ MILITARY</button><button class="chip" data-q="events">🎉 EVENTS</button></div></div></div>
+
+<div class="wrap">
+ <div class="stats"><div class="stat"><b id="count">0</b><span>nearby ideas</span></div><div class="stat"><b id="freeCount">0</b><span>free / public</span></div><div class="stat"><b id="eventCount">0</b><span>events</span></div><div class="stat"><b id="milCount">0</b><span>military benefits</span></div></div>
+ <div class="military" id="militaryInfo"><strong>Military-family savings layer:</strong> OutingJoy keeps this optional rather than making it the identity of the product. Use official program pages to confirm current eligibility and dates.<br><br><a href="https://www.arts.gov/initiatives/blue-star-museums" target="_blank">Blue Star Museums ↗</a><a href="https://www.nps.gov/planyourvisit/passes.htm" target="_blank">NPS passes ↗</a></div>
+ 
+<div class="verifyBanner">
+  <div class="verifyIcon">✓</div>
+  <div><strong>Quick check before you go</strong><br>
+  Hours, admission, parking, lifeguards, reservations, and seasonal access can change. Use the <b>Details</b> link on each card to confirm today’s information before traveling.</div>
+</div>
+<div class="head"><div><h2 id="heading">Ready when you are ✨</h2><p id="sourceLine">Family-friendly ideas nearby — always verify details before you go.</p></div><button id="reset" class="reset">Reset filters</button></div>
+ <div id="cards" class="grid"><div class="empty">Pick a place above and we’ll fill the page with family fun nearby ✨</div></div>
+</div>
+</main>
+<footer><div class="wrap"><strong>OutingJoy</strong> is a working prototype name and has not undergone formal trademark clearance. Activity information comes from public and official sources and may change. Always confirm current hours, fees, parking, access requirements, reservations, and seasonal conditions before traveling.</div></footer>
+
+<script>
+const state={lat:null,lon:null,label:"",items:[],nps:[],quick:"all",loading:false},$=id=>document.getElementById(id);
+function miles(a,b,c,d){const R=3958.8,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,q=Math.sin(x/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
+function esc(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+let timer;
+let pendingLocations=[];
+$("locationSearch").onclick=async()=>{
+ const q=$("locationInput").value.trim();
+ if(!q){$("locationInput").focus();return}
+ await geocode(q,true);
+};
+$("locationInput").addEventListener("keydown",async e=>{
+ if(e.key==="Enter"){e.preventDefault();$("locationSearch").click()}
+});
+$("locationInput").addEventListener("input",()=>{clearTimeout(timer);const q=$("locationInput").value.trim();if(q.length<2){$("suggestions").classList.remove("show");return}timer=setTimeout(()=>geocode(q),250)});
+async function geocode(q,submit=false){try{
+ const u=`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=8&language=en&format=json&countryCode=US`,
+ r=await fetch(u),d=await r.json(),rows=(d.results||[]).filter(x=>x.country_code==="US");
+ pendingLocations=rows;
+ if(submit){
+   if(rows.length===1){await selectLocation(rows[0]);return}
+   if(rows.length>1){await selectLocation(rows[0]);return}
+ }
+ $("suggestions").innerHTML=rows.length?rows.map((x,i)=>`<div class="suggestion" data-i="${i}"><b>${esc(x.name)}, ${esc(x.admin1||"")}</b><small>${esc(x.admin2||"")} ${esc(x.postcodes?.[0]||"")}</small></div>`).join(""):`<div class="suggestion"><b>No U.S. location found</b><small>Try city + state or a ZIP code.</small></div>`;
+ $("suggestions").classList.add("show");
+ document.querySelectorAll(".suggestion[data-i]").forEach(el=>el.onclick=()=>selectLocation(rows[+el.dataset.i]));
+}catch(e){$("locationLabel").textContent="Location search is temporarily unavailable."}}
+async function selectLocation(x){state.lat=x.latitude;state.lon=x.longitude;state.label=`${x.name}, ${x.admin1||""}`;$("locationInput").value=state.label;$("locationLabel").textContent=`Searching near ${state.label}`;$("suggestions").classList.remove("show");await refreshAll()}
+$("radius").onchange=()=>state.lat&&refreshPlaces();
+async function refreshAll(){state.items=[];render();await refreshPlaces();render()}
+async function refreshPlaces(){state.loading=true;render();const rad=(+$("radius").value)*1609,q=`[out:json][timeout:25];(nwr(around:${rad},${state.lat},${state.lon})["leisure"="playground"];nwr(around:${rad},${state.lat},${state.lon})["leisure"="park"];nwr(around:${rad},${state.lat},${state.lon})["amenity"="library"];nwr(around:${rad},${state.lat},${state.lon})["tourism"="museum"];nwr(around:${rad},${state.lat},${state.lon})["natural"="beach"];);out center tags 180;`;try{const r=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:"data="+encodeURIComponent(q)}),d=await r.json();state.items=(d.elements||[]).map(osmItem).filter(Boolean).sort((a,b)=>a.distance-b.distance).slice(0,120)}catch(e){state.items=[]}state.loading=false;render()}
+function osmItem(e){const t=e.tags||{},lat=e.lat??e.center?.lat,lon=e.lon??e.center?.lon;if(!lat||!lon)return null;let cat=t.leisure==="playground"?"Playground":t.leisure==="park"?"Park":t.amenity==="library"?"Library":t.tourism==="museum"?"Museum":t.natural==="beach"?"Beach":"Place",free=t.fee==="no"||["Playground","Library"].includes(cat),publicish=free||cat==="Park";return{title:t.name||`${cat} nearby`,kind:"Place",category:cat,source:"OpenStreetMap",lat,lon,distance:miles(state.lat,state.lon,lat,lon),price:free?"free":publicish?"public":"unknown",military:false,indoor:["Library","Museum"].includes(cat),desc:cat==="Library"?"Public library — often a great source of free story times, kids' programs and indoor activities.":cat==="Playground"?"Local playground mapped by the OpenStreetMap community.":cat==="Park"?"Nearby park or public green space.":cat==="Beach"?"Mapped beach or shoreline access. Verify parking, access and lifeguard status.":"Nearby museum. Admission and hours should be verified.",benefit:free?"Mapped as free or typically public-access; verify current hours.":publicish?"Public place; admission is often free, but parking or special facilities may charge.":"Price was not verified in the source data.",src:t.website||t["contact:website"]||`https://www.openstreetmap.org/${e.type}/${e.id}`}}
+function localNps(){return[]}
+function allItems(){return [...state.items,...localNps()]}
+function matches(x){const q=$("search").value.trim().toLowerCase(),v=$("view").value,p=$("price").value,c=$("category").value,max=+$("radius").value,text=(x.title+" "+(x.category||"")+" "+(x.desc||"")).toLowerCase();if(x.distance>max||(q&&!text.includes(q)))return false;if(v==="places"&&x.kind!=="Place"||v==="events"&&x.kind!=="Event")return false;if(p==="free"&&!["free","public"].includes(x.price)||p==="military"&&!x.military)return false;if(c!=="all"&&c!==(x.category||"")&&!(c==="NPS"&&x.source==="NPS"))return false;if(state.quick==="free"&&!["free","public"].includes(x.price)||state.quick==="military"&&!x.military||state.quick==="events"&&x.kind!=="Event"||state.quick==="indoor"&&!x.indoor||state.quick==="outdoor"&&x.indoor)return false;return true}
+function render(){$("militaryInfo").style.display=(state.quick==="military"||$("price").value==="military")?"block":"none";if(!state.lat){$("cards").innerHTML='<div class="empty">Pick a place above and we’ll fill the page with family fun nearby ✨</div>';return}if(state.loading)$("cards").innerHTML='<div class="loading">Finding family-friendly places near you…</div>';let data=allItems().filter(matches),s=$("sort").value;data.sort((a,b)=>s==="free"?((["free","public"].includes(b.price)?1:0)-(["free","public"].includes(a.price)?1:0)||a.distance-b.distance):s==="events"?((b.kind==="Event")-(a.kind==="Event")||a.distance-b.distance):a.distance-b.distance);$("count").textContent=data.length;$("freeCount").textContent=data.filter(x=>["free","public"].includes(x.price)).length;$("eventCount").textContent=data.filter(x=>x.kind==="Event").length;$("milCount").textContent=data.filter(x=>x.military).length;$("heading").textContent=`Family ideas near ${state.label}`;if(!state.loading)$("cards").innerHTML=data.length?data.map(card).join(""):'<div class="empty">No matches for those filters. Try a wider radius or reset filters.</div>'}
+function card(x){const cls=x.source==="NPS"?"nps":x.kind==="Event"?"event":"",price=x.price==="free"?"FREE":x.price==="public"?"PUBLIC / LIKELY FREE":x.military?"MILITARY BENEFIT":"VERIFY PRICE",badge=x.price==="free"?"free":x.price==="public"?"public":x.military?"mil":"";return `<article class="card ${cls}"><div class="dist">${x.distance.toFixed(1)} mi</div><div class="badges"><span class="badge ${badge}">${price}</span><span class="badge ${x.kind==="Event"?"event":""}">${x.kind}</span><span class="badge">${esc(x.category||x.source)}</span>${x.military?'<span class="badge mil">MILITARY</span>':""}</div><h3>${esc(x.title)}</h3><div class="meta">${x.date?new Date(x.date).toLocaleString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):esc(x.source)}</div><div class="desc">${esc(x.desc||"Family-friendly place near your selected location.")}</div><div class="note"><strong>Know before you go:</strong> ${esc(x.benefit||"Before traveling, verify current hours, fees, parking, access rules, and seasonal conditions on the linked source.")}</div><div class="actions"><a href="${x.src}" target="_blank" rel="noopener">Details ↗</a><a href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}" target="_blank" rel="noopener">Get directions ↗</a></div></article>`}
+["search","view","price","category","sort"].forEach(id=>$(id).addEventListener("input",render));document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{state.quick=b.dataset.q;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===b));render()});$("reset").onclick=()=>{$("search").value="";$("view").value="all";$("price").value="all";$("category").value="all";$("sort").value="distance";state.quick="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.q==="all"));render()};document.addEventListener("click",e=>{if(!e.target.closest(".locationBox"))$("suggestions").classList.remove("show")});render();
+</script>
+</body>
+</html>
