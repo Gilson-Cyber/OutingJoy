@@ -1,21 +1,13 @@
-# OutingJoy v8
+# OutingJoy v9 — Family First
 
-Nationwide family discovery prototype for GitHub Pages.
+OutingJoy now searches only family-plausible place categories rather than broad local attractions.
 
-## v8 improvements
-- Venue website is preferred when OpenStreetMap provides one.
-- If no venue website is available, “Find official site” opens a targeted Google search instead of dumping the user onto an OpenStreetMap record.
-- Visible full-screen loading state while nearby places are being fetched.
-- Price tile on each card:
-  - Free / usually free when supported by source data
-  - Parsed per-person and family-of-four estimate when source data actually includes a numeric admission charge
-  - “Verify price” otherwise
-- Military filter now surfaces:
-  - places explicitly tagged with a military benefit, and
-  - museums/attractions where users are prompted to check programs such as Blue Star Museums.
-- Military candidate listings are clearly labeled “CHECK MILITARY BENEFIT” so OutingJoy does not invent discounts.
-- All seasonal hours, admission, parking, and access should be verified before traveling.
+Included: playgrounds, indoor play centers, parks, nature reserves, trailheads, libraries, museums, beaches, zoos, aquariums, theme parks, water parks, arcades, and picnic areas.
 
-## Publish
-Upload `index.html`, `README.md`, and `GITHUB_UPLOAD_INSTRUCTIONS.txt` to the root of the GitHub repository.
-GitHub Settings → Pages → Deploy from a branch → main → /(root).
+It explicitly rejects obvious adult-centric and memorial/funeral-related terms/categories. This is heuristic filtering, not a guarantee.
+
+The military filter/button is removed. Future known military benefits can be displayed on individual tiles if reliable source data provides them.
+
+OutingJoy only shows an Official Website button when a real website URL is included with the place data. No Google-search fallback is used.
+
+Upload the three files in this package to the root of your existing GitHub repository and commit to main.

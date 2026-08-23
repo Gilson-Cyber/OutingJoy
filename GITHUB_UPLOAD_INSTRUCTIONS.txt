@@ -1,16 +1,12 @@
-OUTINGJOY v8 — GITHUB UPLOAD
+OUTINGJOY v9 — FAMILY FIRST
 
-Upload all 3 files to the ROOT of your existing OutingJoy GitHub repository and replace the old versions:
+Upload and replace these 3 files in the root of your existing GitHub repository:
 
 1. index.html
 2. README.md
 3. GITHUB_UPLOAD_INSTRUCTIONS.txt
 
-Then commit the changes to main.
+Commit to main.
 
-If GitHub Pages is already enabled, the site should redeploy automatically.
-If needed:
-Settings → Pages → Deploy from a branch → main → /(root) → Save.
-
-After deployment, refresh:
+Your existing GitHub Pages site should redeploy automatically:
 https://gilson-cyber.github.io/OutingJoy/
