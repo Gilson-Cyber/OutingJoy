@@ -40,9 +40,28 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 20px}.top{display:f
 .verifyBanner strong{color:#4e4932}
 .verifyIcon{flex:0 0 28px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--sun);color:#5d4b1d;font-weight:950}
 
+
+/* v8 UX upgrades */
+.searchState{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(255,250,244,.76);backdrop-filter:blur(6px)}
+.searchState.show{display:flex}
+.searchPanel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px 26px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;font-weight:850}
+.spinner{width:26px;height:26px;border:3px solid #dcebe7;border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.priceBox{position:absolute;right:15px;bottom:15px;min-width:118px;background:linear-gradient(145deg,#fff9e9,#fff);border:1px solid #eddcae;border-radius:13px;padding:8px 10px;text-align:right;box-shadow:0 5px 14px rgba(91,71,28,.06)}
+.priceBox b{display:block;font-size:13px;color:#604e20}
+.priceBox small{font-size:10px;color:#8a7b56}
+.card{padding-bottom:72px}
+.actions{padding-right:132px}
+.sourceHint{font-size:10px;color:var(--muted);margin-top:7px}
+.militaryCandidate{background:linear-gradient(135deg,#f3f4ff,#fff);border-color:#dee2f5}
+@media(max-width:650px){.priceBox{position:static;margin-top:12px;text-align:left}.card{padding-bottom:18px}.actions{padding-right:0}}
+
 </style>
 </head>
 <body>
+<div id="searchState" class="searchState" aria-live="polite" aria-busy="true">
+ <div class="searchPanel"><div class="spinner"></div><span id="searchStateText">Finding family fun nearby…</span></div>
+</div>
 <div class="wrap top">
  <div class="brand"><div class="logo">☀️</div><div>OutingJoy<div class="tag">Find a good day, anywhere.</div></div></div>
  <div class="tag">Free to use • Parent-first • Nationwide</div>
@@ -68,19 +87,19 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 20px}.top{display:f
 <div class="toolbar"><div class="wrap"><div class="filters">
  <input id="search" placeholder="Search what sounds fun…">
  <select id="view"><option value="all">Places + events</option><option value="places">Places only</option><option value="events">Events only</option></select>
- <select id="price"><option value="all">Any price</option><option value="free">Free / public</option><option value="military">Military benefit</option></select>
- <select id="category"><option value="all">All categories</option><option>Playground</option><option>Park</option><option>Library</option><option>Museum</option><option>Beach</option><option>NPS</option></select>
+ <select id="price"><option value="all">Any price</option><option value="free">Free / public</option><option value="military">Military savings</option></select>
+ <select id="category"><option value="all">All categories</option><option>Playground</option><option>Park</option><option>Library</option><option>Museum</option><option>Attraction</option><option>Beach</option><option>NPS</option></select>
  <select id="sort"><option value="distance">Closest first</option><option value="free">Free first</option><option value="events">Events first</option></select>
 </div><div class="quick"><button class="chip active" data-q="all">✨ PICKS</button><button class="chip" data-q="free">💸 FREE</button><button class="chip" data-q="outdoor">🌳 OUTDOORS</button><button class="chip" data-q="indoor">🏠 INDOORS</button><button class="chip" data-q="military">🎖️ MILITARY</button><button class="chip" data-q="events">🎉 EVENTS</button></div></div></div>
 
 <div class="wrap">
  <div class="stats"><div class="stat"><b id="count">0</b><span>nearby ideas</span></div><div class="stat"><b id="freeCount">0</b><span>free / public</span></div><div class="stat"><b id="eventCount">0</b><span>events</span></div><div class="stat"><b id="milCount">0</b><span>military benefits</span></div></div>
- <div class="military" id="militaryInfo"><strong>Military-family savings layer:</strong> OutingJoy keeps this optional rather than making it the identity of the product. Use official program pages to confirm current eligibility and dates.<br><br><a href="https://www.arts.gov/initiatives/blue-star-museums" target="_blank">Blue Star Museums ↗</a><a href="https://www.nps.gov/planyourvisit/passes.htm" target="_blank">NPS passes ↗</a></div>
+ <div class="military" id="militaryInfo"><strong>Military savings:</strong> This filter surfaces nearby museums and public attractions that are worth checking for military admission programs, plus places explicitly tagged with military benefits when source data provides it. A listing marked <b>Check military benefit</b> is not a promise of a discount—confirm participation before traveling.<br><br><a href="https://www.arts.gov/initiatives/blue-star-museums" target="_blank">Blue Star Museums ↗</a><a href="https://www.nps.gov/planyourvisit/passes.htm" target="_blank">NPS military passes ↗</a></div>
  
 <div class="verifyBanner">
   <div class="verifyIcon">✓</div>
   <div><strong>Quick check before you go</strong><br>
-  Hours, admission, parking, lifeguards, reservations, and seasonal access can change. Use the <b>Details</b> link on each card to confirm today’s information before traveling.</div>
+  Hours, admission, parking, lifeguards, reservations, and seasonal access can change. Use <b>Official site</b> (or <b>Find official site</b>) on each card to confirm today’s information before traveling.</div>
 </div>
 <div class="head"><div><h2 id="heading">Ready when you are ✨</h2><p id="sourceLine">Family-friendly ideas nearby — always verify details before you go.</p></div><button id="reset" class="reset">Reset filters</button></div>
  <div id="cards" class="grid"><div class="empty">Pick a place above and we’ll fill the page with family fun nearby ✨</div></div>
@@ -92,6 +111,26 @@ a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 20px}.top{display:f
 const state={lat:null,lon:null,label:"",items:[],nps:[],quick:"all",loading:false},$=id=>document.getElementById(id);
 function miles(a,b,c,d){const R=3958.8,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,q=Math.sin(x/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
 function esc(s=""){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+function officialSearchUrl(name){return `https://www.google.com/search?q=${encodeURIComponent(name+" "+state.label+" official website")}`}
+function parseMoney(tags){
+ const raw=(tags.charge||tags.admission||tags.fee_amount||"").toString().trim();
+ const m=raw.match(/\$?\s*(\d+(?:\.\d{1,2})?)/);
+ if(!m)return null;
+ const amount=Number(m[1]); if(!Number.isFinite(amount)||amount<=0)return null;
+ return amount;
+}
+function militaryTagged(t){
+ const vals=[t.military_discount,t["discount:military"],t["military:discount"],t["military_access"],t["military"]]
+   .filter(Boolean).join(" ").toLowerCase();
+ return /(yes|free|discount|military)/.test(vals);
+}
+function setSearching(on,msg="Finding family fun nearby…"){
+ state.loading=on;
+ const el=$("searchState");
+ if(el){el.classList.toggle("show",on);$("searchStateText").textContent=msg}
+}
+
 let timer;
 let pendingLocations=[];
 $("locationSearch").onclick=async()=>{
@@ -118,13 +157,89 @@ async function geocode(q,submit=false){try{
 async function selectLocation(x){state.lat=x.latitude;state.lon=x.longitude;state.label=`${x.name}, ${x.admin1||""}`;$("locationInput").value=state.label;$("locationLabel").textContent=`Searching near ${state.label}`;$("suggestions").classList.remove("show");await refreshAll()}
 $("radius").onchange=()=>state.lat&&refreshPlaces();
 async function refreshAll(){state.items=[];render();await refreshPlaces();render()}
-async function refreshPlaces(){state.loading=true;render();const rad=(+$("radius").value)*1609,q=`[out:json][timeout:25];(nwr(around:${rad},${state.lat},${state.lon})["leisure"="playground"];nwr(around:${rad},${state.lat},${state.lon})["leisure"="park"];nwr(around:${rad},${state.lat},${state.lon})["amenity"="library"];nwr(around:${rad},${state.lat},${state.lon})["tourism"="museum"];nwr(around:${rad},${state.lat},${state.lon})["natural"="beach"];);out center tags 180;`;try{const r=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:"data="+encodeURIComponent(q)}),d=await r.json();state.items=(d.elements||[]).map(osmItem).filter(Boolean).sort((a,b)=>a.distance-b.distance).slice(0,120)}catch(e){state.items=[]}state.loading=false;render()}
-function osmItem(e){const t=e.tags||{},lat=e.lat??e.center?.lat,lon=e.lon??e.center?.lon;if(!lat||!lon)return null;let cat=t.leisure==="playground"?"Playground":t.leisure==="park"?"Park":t.amenity==="library"?"Library":t.tourism==="museum"?"Museum":t.natural==="beach"?"Beach":"Place",free=t.fee==="no"||["Playground","Library"].includes(cat),publicish=free||cat==="Park";return{title:t.name||`${cat} nearby`,kind:"Place",category:cat,source:"OpenStreetMap",lat,lon,distance:miles(state.lat,state.lon,lat,lon),price:free?"free":publicish?"public":"unknown",military:false,indoor:["Library","Museum"].includes(cat),desc:cat==="Library"?"Public library — often a great source of free story times, kids' programs and indoor activities.":cat==="Playground"?"Local playground mapped by the OpenStreetMap community.":cat==="Park"?"Nearby park or public green space.":cat==="Beach"?"Mapped beach or shoreline access. Verify parking, access and lifeguard status.":"Nearby museum. Admission and hours should be verified.",benefit:free?"Mapped as free or typically public-access; verify current hours.":publicish?"Public place; admission is often free, but parking or special facilities may charge.":"Price was not verified in the source data.",src:t.website||t["contact:website"]||`https://www.openstreetmap.org/${e.type}/${e.id}`}}
+async function refreshPlaces(){
+ setSearching(true);
+ const rad=(+$("radius").value)*1609;
+ const q=`[out:json][timeout:25];(
+ nwr(around:${rad},${state.lat},${state.lon})["leisure"="playground"];
+ nwr(around:${rad},${state.lat},${state.lon})["leisure"="park"];
+ nwr(around:${rad},${state.lat},${state.lon})["amenity"="library"];
+ nwr(around:${rad},${state.lat},${state.lon})["tourism"="museum"];
+ nwr(around:${rad},${state.lat},${state.lon})["natural"="beach"];
+ nwr(around:${rad},${state.lat},${state.lon})["tourism"="attraction"];
+ );out center tags 220;`;
+ try{
+   const r=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:"data="+encodeURIComponent(q)});
+   if(!r.ok)throw new Error("Place search unavailable");
+   const d=await r.json();
+   state.items=(d.elements||[]).map(osmItem).filter(Boolean).sort((a,b)=>a.distance-b.distance).slice(0,140);
+ }catch(e){
+   state.items=[];
+   $("locationLabel").textContent=`We couldn't complete the nearby search. Try Search again in a moment.`;
+ }
+ setSearching(false);render();
+}
+function osmItem(e){
+ const t=e.tags||{},lat=e.lat??e.center?.lat,lon=e.lon??e.center?.lon;
+ if(!lat||!lon)return null;
+ let cat=t.leisure==="playground"?"Playground":t.leisure==="park"?"Park":t.amenity==="library"?"Library":t.tourism==="museum"?"Museum":t.natural==="beach"?"Beach":t.tourism==="attraction"?"Attraction":"Place";
+ const amount=parseMoney(t);
+ const explicitFree=t.fee==="no"||t.charge==="0"||t.charge==="$0";
+ const publicish=explicitFree||["Playground","Library","Park"].includes(cat);
+ const website=t.website||t["contact:website"]||t.url||"";
+ const taggedMilitary=militaryTagged(t);
+ const militaryCandidate=taggedMilitary||["Museum","Attraction"].includes(cat);
+ let price=explicitFree?"free":publicish?"public":amount?"paid":"unknown";
+ let priceLabel=explicitFree?"Free":publicish?"Usually free":amount?`~$${amount.toFixed(amount%1?2:0)} / person`:"Verify price";
+ let familyPrice=amount?`Family of 4 ~ $${(amount*4).toFixed((amount*4)%1?2:0)}`:"";
+ return{
+   title:t.name||`${cat} nearby`,kind:"Place",category:cat,source:"OpenStreetMap",
+   lat,lon,distance:miles(state.lat,state.lon,lat,lon),price,priceAmount:amount,priceLabel,familyPrice,
+   military:taggedMilitary,militaryCandidate,indoor:["Library","Museum"].includes(cat),
+   desc:cat==="Library"?"Public library — often a great source of free story times, kids' programs and indoor activities.":cat==="Playground"?"Local playground mapped by the OpenStreetMap community.":cat==="Park"?"Nearby park or public green space.":cat==="Beach"?"Mapped beach or shoreline access. Verify parking, access and lifeguard status.":cat==="Museum"?"Nearby museum. Check the official site for current admission, exhibits, family programs and military participation.":"Nearby family attraction. Verify current admission and hours.",
+   benefit:taggedMilitary?"Source data indicates a military benefit. Confirm eligibility and current terms before traveling.":militaryCandidate?"This venue may participate in military admission programs. Check the official site or Blue Star Museums before traveling.":explicitFree?"Source data indicates no admission fee; verify parking and special-program charges.":publicish?"Public place; admission is often free, but parking or special facilities may charge.":"Before traveling, verify current hours, admission, parking and access rules.",
+   officialUrl:website||officialSearchUrl(t.name||cat),
+   hasOfficialUrl:!!website,
+   mapSource:`https://www.openstreetmap.org/${e.type}/${e.id}`
+ };
+}
 function localNps(){return[]}
 function allItems(){return [...state.items,...localNps()]}
-function matches(x){const q=$("search").value.trim().toLowerCase(),v=$("view").value,p=$("price").value,c=$("category").value,max=+$("radius").value,text=(x.title+" "+(x.category||"")+" "+(x.desc||"")).toLowerCase();if(x.distance>max||(q&&!text.includes(q)))return false;if(v==="places"&&x.kind!=="Place"||v==="events"&&x.kind!=="Event")return false;if(p==="free"&&!["free","public"].includes(x.price)||p==="military"&&!x.military)return false;if(c!=="all"&&c!==(x.category||"")&&!(c==="NPS"&&x.source==="NPS"))return false;if(state.quick==="free"&&!["free","public"].includes(x.price)||state.quick==="military"&&!x.military||state.quick==="events"&&x.kind!=="Event"||state.quick==="indoor"&&!x.indoor||state.quick==="outdoor"&&x.indoor)return false;return true}
-function render(){$("militaryInfo").style.display=(state.quick==="military"||$("price").value==="military")?"block":"none";if(!state.lat){$("cards").innerHTML='<div class="empty">Pick a place above and we’ll fill the page with family fun nearby ✨</div>';return}if(state.loading)$("cards").innerHTML='<div class="loading">Finding family-friendly places near you…</div>';let data=allItems().filter(matches),s=$("sort").value;data.sort((a,b)=>s==="free"?((["free","public"].includes(b.price)?1:0)-(["free","public"].includes(a.price)?1:0)||a.distance-b.distance):s==="events"?((b.kind==="Event")-(a.kind==="Event")||a.distance-b.distance):a.distance-b.distance);$("count").textContent=data.length;$("freeCount").textContent=data.filter(x=>["free","public"].includes(x.price)).length;$("eventCount").textContent=data.filter(x=>x.kind==="Event").length;$("milCount").textContent=data.filter(x=>x.military).length;$("heading").textContent=`Family ideas near ${state.label}`;if(!state.loading)$("cards").innerHTML=data.length?data.map(card).join(""):'<div class="empty">No matches for those filters. Try a wider radius or reset filters.</div>'}
-function card(x){const cls=x.source==="NPS"?"nps":x.kind==="Event"?"event":"",price=x.price==="free"?"FREE":x.price==="public"?"PUBLIC / LIKELY FREE":x.military?"MILITARY BENEFIT":"VERIFY PRICE",badge=x.price==="free"?"free":x.price==="public"?"public":x.military?"mil":"";return `<article class="card ${cls}"><div class="dist">${x.distance.toFixed(1)} mi</div><div class="badges"><span class="badge ${badge}">${price}</span><span class="badge ${x.kind==="Event"?"event":""}">${x.kind}</span><span class="badge">${esc(x.category||x.source)}</span>${x.military?'<span class="badge mil">MILITARY</span>':""}</div><h3>${esc(x.title)}</h3><div class="meta">${x.date?new Date(x.date).toLocaleString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):esc(x.source)}</div><div class="desc">${esc(x.desc||"Family-friendly place near your selected location.")}</div><div class="note"><strong>Know before you go:</strong> ${esc(x.benefit||"Before traveling, verify current hours, fees, parking, access rules, and seasonal conditions on the linked source.")}</div><div class="actions"><a href="${x.src}" target="_blank" rel="noopener">Details ↗</a><a href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}" target="_blank" rel="noopener">Get directions ↗</a></div></article>`}
+function matches(x){
+ const q=$("search").value.trim().toLowerCase(),v=$("view").value,p=$("price").value,c=$("category").value,max=+$("radius").value,text=(x.title+" "+(x.category||"")+" "+(x.desc||"")).toLowerCase();
+ if(x.distance>max||(q&&!text.includes(q)))return false;
+ if(v==="places"&&x.kind!=="Place"||v==="events"&&x.kind!=="Event")return false;
+ if(p==="free"&&!["free","public"].includes(x.price))return false;
+ if(p==="military"&&!(x.military||x.militaryCandidate))return false;
+ if(c!=="all"&&c!==(x.category||""))return false;
+ if(state.quick==="free"&&!["free","public"].includes(x.price))return false;
+ if(state.quick==="military"&&!(x.military||x.militaryCandidate))return false;
+ if(state.quick==="events"&&x.kind!=="Event")return false;
+ if(state.quick==="indoor"&&!x.indoor)return false;
+ if(state.quick==="outdoor"&&x.indoor)return false;
+ return true
+}
+function render(){$("militaryInfo").style.display=(state.quick==="military"||$("price").value==="military")?"block":"none";if(!state.lat){$("cards").innerHTML='<div class="empty">Pick a place above and we’ll fill the page with family fun nearby ✨</div>';return}if(state.loading)$("cards").innerHTML='<div class="loading">Finding family-friendly places near you…</div>';let data=allItems().filter(matches),s=$("sort").value;data.sort((a,b)=>s==="free"?((["free","public"].includes(b.price)?1:0)-(["free","public"].includes(a.price)?1:0)||a.distance-b.distance):s==="events"?((b.kind==="Event")-(a.kind==="Event")||a.distance-b.distance):a.distance-b.distance);$("count").textContent=data.length;$("freeCount").textContent=data.filter(x=>["free","public"].includes(x.price)).length;$("eventCount").textContent=data.filter(x=>x.kind==="Event").length;$("milCount").textContent=data.filter(x=>x.military||x.militaryCandidate).length;$("heading").textContent=`Family ideas near ${state.label}`;if(!state.loading)$("cards").innerHTML=data.length?data.map(card).join(""):'<div class="empty">No matches for those filters. Try a wider radius or reset filters.</div>'}
+function card(x){
+ const cls=x.kind==="Event"?"event":"";
+ const topPrice=x.price==="free"?"FREE":x.price==="public"?"PUBLIC":x.price==="paid"?"PAID":"PRICE TBD";
+ const topBadge=x.price==="free"?"free":x.price==="public"?"public":"";
+ const milBadge=x.military?'<span class="badge mil">MILITARY BENEFIT</span>':x.militaryCandidate?'<span class="badge mil">CHECK MILITARY BENEFIT</span>':"";
+ const detailLabel=x.hasOfficialUrl?"Official site ↗":"Find official site ↗";
+ const priceMain=x.priceLabel||"Verify price";
+ const priceSub=x.familyPrice|| (x.price==="free"?"Family outing: $0 admission":"Check current admission");
+ return `<article class="card ${cls} ${x.militaryCandidate&&!x.military?"militaryCandidate":""}">
+ <div class="dist">${x.distance.toFixed(1)} mi</div>
+ <div class="badges"><span class="badge ${topBadge}">${topPrice}</span><span class="badge">${x.kind}</span><span class="badge">${esc(x.category||x.source)}</span>${milBadge}</div>
+ <h3>${esc(x.title)}</h3>
+ <div class="meta">${esc(x.source)}</div>
+ <div class="desc">${esc(x.desc||"Family-friendly place near your selected location.")}</div>
+ <div class="note"><strong>Know before you go:</strong> ${esc(x.benefit||"Verify current hours, fees, parking, access rules and seasonal conditions before traveling.")}</div>
+ <div class="sourceHint">${x.hasOfficialUrl?"Website supplied by source data.":"No venue website was supplied, so this opens a search for the official site."}</div>
+ <div class="actions"><a href="${x.officialUrl||x.src}" target="_blank" rel="noopener">${detailLabel}</a><a href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}" target="_blank" rel="noopener">Get directions ↗</a></div>
+ <div class="priceBox"><b>${esc(priceMain)}</b><small>${esc(priceSub)}</small></div>
+ </article>`
+}
 ["search","view","price","category","sort"].forEach(id=>$(id).addEventListener("input",render));document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{state.quick=b.dataset.q;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===b));render()});$("reset").onclick=()=>{$("search").value="";$("view").value="all";$("price").value="all";$("category").value="all";$("sort").value="distance";state.quick="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.q==="all"));render()};document.addEventListener("click",e=>{if(!e.target.closest(".locationBox"))$("suggestions").classList.remove("show")});render();
 </script>
 </body>

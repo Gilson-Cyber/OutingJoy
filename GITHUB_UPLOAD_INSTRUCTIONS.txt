@@ -1,20 +1,16 @@
-OUTINGJOY — GITHUB UPLOAD GUIDE
+OUTINGJOY v8 — GITHUB UPLOAD
 
-Upload all 3 files in this folder to the ROOT of your GitHub repository:
+Upload all 3 files to the ROOT of your existing OutingJoy GitHub repository and replace the old versions:
 
 1. index.html
 2. README.md
 3. GITHUB_UPLOAD_INSTRUCTIONS.txt
 
-Then in GitHub:
-Settings → Pages → Build and deployment
-Source: Deploy from a branch
-Branch: main
-Folder: /(root)
-Click Save.
+Then commit the changes to main.
 
-Important:
-- index.html is the actual OutingJoy website.
-- README.md documents the project.
-- GITHUB_UPLOAD_INSTRUCTIONS.txt is only this setup guide and does not affect the website.
-- No API key or backend is required for this version.
+If GitHub Pages is already enabled, the site should redeploy automatically.
+If needed:
+Settings → Pages → Deploy from a branch → main → /(root) → Save.
+
+After deployment, refresh:
+https://gilson-cyber.github.io/OutingJoy/

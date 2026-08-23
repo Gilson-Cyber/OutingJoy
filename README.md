@@ -1,27 +1,21 @@
-# OutingJoy
-### Find the fun. Make the memory.
+# OutingJoy v8
 
-A zero-cost, nationwide family discovery prototype for GitHub Pages.
+Nationwide family discovery prototype for GitHub Pages.
 
-## What works
-- Search any U.S. city/state/ZIP and press Search.
-- Nearby parks, playgrounds, libraries, museums, and beaches are discovered from public place data.
-- Filter for free/public, indoor/outdoor, events, and military-related options.
-- Every listing includes a source/details link and directions.
+## v8 improvements
+- Venue website is preferred when OpenStreetMap provides one.
+- If no venue website is available, “Find official site” opens a targeted Google search instead of dumping the user onto an OpenStreetMap record.
+- Visible full-screen loading state while nearby places are being fetched.
+- Price tile on each card:
+  - Free / usually free when supported by source data
+  - Parsed per-person and family-of-four estimate when source data actually includes a numeric admission charge
+  - “Verify price” otherwise
+- Military filter now surfaces:
+  - places explicitly tagged with a military benefit, and
+  - museums/attractions where users are prompted to check programs such as Blue Star Museums.
+- Military candidate listings are clearly labeled “CHECK MILITARY BENEFIT” so OutingJoy does not invent discounts.
+- All seasonal hours, admission, parking, and access should be verified before traveling.
 
-## Important data note
-OutingJoy does not claim that seasonal hours, admission fees, parking rules, lifeguard schedules, or access requirements are live. Those details can change frequently.
-
-The UI reminds users to verify current information on the linked source before traveling.
-
-## Publish with GitHub Pages
-1. Upload the files in this project to a public GitHub repository.
-2. Go to Settings → Pages.
-3. Choose Deploy from a branch.
-4. Select `main` and `/(root)`.
-5. Save.
-
-No API keys, scheduled jobs, or paid backend services are required.
-
-## Brand note
-OutingJoy is a working prototype name, not a completed trademark/domain clearance.
+## Publish
+Upload `index.html`, `README.md`, and `GITHUB_UPLOAD_INSTRUCTIONS.txt` to the root of the GitHub repository.
+GitHub Settings → Pages → Deploy from a branch → main → /(root).
